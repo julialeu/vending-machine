@@ -56,4 +56,17 @@ final class ProductInventory
         return isset($this->stock[$selector->value])
             && $this->stock[$selector->value]['quantity'] > 0;
     }
+
+    public function updateQuantity(ProductSelector $selector, int $quantity): void
+    {
+        if (!isset($this->stock[$selector->value])) {
+            throw new ProductNotFoundException($selector);
+        }
+
+        if ($quantity < 0) {
+            throw new InvalidStockQuantityException($quantity);
+        }
+
+        $this->stock[$selector->value]['quantity'] = $quantity;
+    }
 }

@@ -11,6 +11,7 @@ use VendingMachine\Domain\VendingMachine\Service\ChangeCalculator;
 use VendingMachine\Domain\VendingMachine\ValueObject\Change;
 use VendingMachine\Domain\VendingMachine\ValueObject\Coin;
 use VendingMachine\Domain\VendingMachine\ValueObject\ProductSelector;
+use VendingMachine\Domain\VendingMachine\ValueObject\Money;
 use VendingMachine\Domain\VendingMachine\ValueObject\Purchase;
 
 final class VendingMachine
@@ -68,9 +69,19 @@ final class VendingMachine
         return new Purchase($product, $change);
     }
 
+    public function insertedTotal(): Money
+    {
+        return $this->insertedCoins->total();
+    }
+
     public function stockProduct(Product $product, int $quantity): void
     {
         $this->productInventory->stock($product, $quantity);
+    }
+
+    public function updateProductStock(ProductSelector $selector, int $quantity): void
+    {
+        $this->productInventory->updateQuantity($selector, $quantity);
     }
 
     public function stockCoin(Coin $coin, int $quantity): void
