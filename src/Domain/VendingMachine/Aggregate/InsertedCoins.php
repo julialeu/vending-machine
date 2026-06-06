@@ -35,6 +35,12 @@ final class InsertedCoins
         return $coins;
     }
 
+    /** @return Coin[] */
+    public function coins(): array
+    {
+        return $this->coins;
+    }
+
     public function isEmpty(): bool
     {
         return empty($this->coins);

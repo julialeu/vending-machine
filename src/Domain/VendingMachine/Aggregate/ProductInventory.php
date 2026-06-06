@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace VendingMachine\Domain\VendingMachine\Aggregate;
 
 use VendingMachine\Domain\VendingMachine\Entity\Product;
+use VendingMachine\Domain\VendingMachine\Exception\InvalidStockQuantityException;
 use VendingMachine\Domain\VendingMachine\Exception\ProductNotAvailableException;
 use VendingMachine\Domain\VendingMachine\Exception\ProductNotFoundException;
 use VendingMachine\Domain\VendingMachine\ValueObject\ProductSelector;
@@ -16,9 +17,13 @@ final class ProductInventory
 
     public function stock(Product $product, int $quantity): void
     {
+        if ($quantity < 0) {
+            throw new InvalidStockQuantityException($quantity);
+        }
+
         $this->stock[$product->selector()->value] = [
             'product'  => $product,
-            'quantity' => max(0, $quantity),
+            'quantity' => $quantity,
         ];
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace VendingMachine\Domain\VendingMachine\Aggregate;
 
+use VendingMachine\Domain\VendingMachine\Exception\InvalidStockQuantityException;
 use VendingMachine\Domain\VendingMachine\ValueObject\Coin;
 
 final class CoinInventory
@@ -23,7 +24,11 @@ final class CoinInventory
 
     public function set(Coin $coin, int $quantity): void
     {
-        $this->counts[$coin->value] = max(0, $quantity);
+        if ($quantity < 0) {
+            throw new InvalidStockQuantityException($quantity);
+        }
+
+        $this->counts[$coin->value] = $quantity;
     }
 
     public function countOf(Coin $coin): int
