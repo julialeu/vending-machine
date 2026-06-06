@@ -7,7 +7,7 @@ namespace VendingMachine\Application\UseCase\InsertCoin;
 final class InsertCoinRequest
 {
     public function __construct(
-        public readonly string $coinValue,
+        public readonly int $coinCents,
     ) {
     }
 }

@@ -16,7 +16,7 @@ final class InsertCoinUseCase
 
     public function execute(InsertCoinRequest $request): InsertCoinResponse
     {
-        $coin = Coin::fromCents((int) round((float) $request->coinValue * 100));
+        $coin = Coin::fromCents($request->coinCents);
 
         $machine = $this->repository->get();
         $machine->insertCoin($coin);
