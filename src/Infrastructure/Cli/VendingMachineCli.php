@@ -53,8 +53,12 @@ final class VendingMachineCli
                 return;
             }
 
+            if (str_starts_with($upper, 'GET-')) {
+                $this->handleSelectProduct($upper);
+                return;
+            }
+
             match ($upper) {
-                'GET-WATER', 'GET-JUICE', 'GET-SODA' => $this->handleSelectProduct($upper),
                 'RETURN' => $this->handleReturnCoins(),
                 'SERVICE' => $this->handleService(),
                 default => $this->printUnknownCommand($input),

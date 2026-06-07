@@ -55,20 +55,27 @@ final class ServiceMachineUseCaseTest extends TestCase
     {
         $this->serviceMachine->execute(new ServiceMachineRequest(
             productStocks: [],
-            coinStocks: [5 => 99],
+            coinStocks: [5 => 99, 10 => 0, 25 => 0],
         ));
 
-        // Water costs 65 cents, insert 1 EUR — needs 35 cents change (7x5)
+        // Water costs 65 cents, insert 1 EUR — needs 35 cents change (7x five-cent coins)
         $this->insertCoin->execute(new InsertCoinRequest(100));
         $response = $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
 
-        $this->assertSame(
-            35,
-            $response->changeCoins === [] ? 0 :
-            array_sum(array_map(
-                static fn (string $c) => (int) round((float) $c * 100),
-                $response->changeCoins
-            ))
-        );
+        $this->assertSame(35, $this->sumDisplayCoinsInCents($response->changeCoins));
+    }
+
+    /** @param string[] $coins */
+    private function sumDisplayCoinsInCents(array $coins): int
+    {
+        return array_sum(array_map(static function (string $display): int {
+            $parts = explode('.', $display);
+            $whole = (int) $parts[0] * 100;
+            $fractional = isset($parts[1])
+                ? (int) str_pad(substr($parts[1], 0, 2), 2, '0', STR_PAD_RIGHT)
+                : 0;
+
+            return $whole + $fractional;
+        }, $coins));
     }
 }
