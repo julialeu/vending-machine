@@ -22,7 +22,7 @@ final class ReturnCoinsUseCase
 
         return new ReturnCoinsResponse(
             returnedCoins: array_map(
-                static fn(Coin $coin) => $coin->displayValue(),
+                static fn (Coin $coin) => $coin->displayValue(),
                 $coins,
             ),
         );

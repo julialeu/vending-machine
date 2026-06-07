@@ -19,10 +19,10 @@ final class ChangeCalculator
 
         $denominations = array_filter(
             Coin::cases(),
-            static fn(Coin $coin) => $coin->isReturnableAsChange()
+            static fn (Coin $coin) => $coin->isReturnableAsChange()
         );
 
-        usort($denominations, static fn(Coin $a, Coin $b) => $b->value <=> $a->value);
+        usort($denominations, static fn (Coin $a, Coin $b) => $b->value <=> $a->value);
 
         foreach ($denominations as $coin) {
             $available = $inventory->countOf($coin);

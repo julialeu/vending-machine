@@ -34,7 +34,7 @@ final class Change
     {
         return array_reduce(
             $this->coins,
-            static fn(Money $carry, Coin $coin) => $carry->add($coin->toMoney()),
+            static fn (Money $carry, Coin $coin) => $carry->add($coin->toMoney()),
             Money::zero()
         );
     }

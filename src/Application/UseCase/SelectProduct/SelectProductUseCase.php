@@ -26,7 +26,7 @@ final class SelectProductUseCase
         return new SelectProductResponse(
             productName: $purchase->product()->name(),
             changeCoins: array_map(
-                static fn(Coin $coin) => $coin->displayValue(),
+                static fn (Coin $coin) => $coin->displayValue(),
                 $purchase->change()->coins(),
             ),
         );

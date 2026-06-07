@@ -10,8 +10,8 @@ use VendingMachine\Domain\VendingMachine\Exception\ProductNotAvailableException;
 use VendingMachine\Domain\VendingMachine\Service\ChangeCalculator;
 use VendingMachine\Domain\VendingMachine\ValueObject\Change;
 use VendingMachine\Domain\VendingMachine\ValueObject\Coin;
-use VendingMachine\Domain\VendingMachine\ValueObject\ProductSelector;
 use VendingMachine\Domain\VendingMachine\ValueObject\Money;
+use VendingMachine\Domain\VendingMachine\ValueObject\ProductSelector;
 use VendingMachine\Domain\VendingMachine\ValueObject\Purchase;
 
 final class VendingMachine
