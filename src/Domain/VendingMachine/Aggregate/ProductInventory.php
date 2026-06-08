@@ -36,6 +36,17 @@ final class ProductInventory
         return $this->stock[$selector->value]['product'];
     }
 
+    public function findAvailable(ProductSelector $selector): Product
+    {
+        $product = $this->find($selector);
+
+        if ($this->stock[$selector->value]['quantity'] <= 0) {
+            throw new ProductNotAvailableException($product);
+        }
+
+        return $product;
+    }
+
     public function dispense(ProductSelector $selector): Product
     {
         if (!isset($this->stock[$selector->value])) {

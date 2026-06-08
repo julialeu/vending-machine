@@ -79,4 +79,27 @@ final class ProductInventoryTest extends TestCase
         $inventory->updateQuantity(ProductSelector::WATER, 5);
         $this->assertTrue($inventory->hasAvailable(ProductSelector::WATER));
     }
+
+    public function test_find_available_returns_product_when_in_stock(): void
+    {
+        $inventory = new ProductInventory();
+        $inventory->stock($this->water(), 2);
+
+        $product = $inventory->findAvailable(ProductSelector::WATER);
+        $this->assertSame('Water', $product->name());
+    }
+
+    public function test_find_available_throws_when_not_found(): void
+    {
+        $this->expectException(ProductNotFoundException::class);
+        (new ProductInventory())->findAvailable(ProductSelector::WATER);
+    }
+
+    public function test_find_available_throws_when_out_of_stock(): void
+    {
+        $this->expectException(ProductNotAvailableException::class);
+        $inventory = new ProductInventory();
+        $inventory->stock($this->water(), 0);
+        $inventory->findAvailable(ProductSelector::WATER);
+    }
 }

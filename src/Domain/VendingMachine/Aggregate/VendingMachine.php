@@ -6,7 +6,6 @@ namespace VendingMachine\Domain\VendingMachine\Aggregate;
 
 use VendingMachine\Domain\VendingMachine\Entity\Product;
 use VendingMachine\Domain\VendingMachine\Exception\InsufficientFundsException;
-use VendingMachine\Domain\VendingMachine\Exception\ProductNotAvailableException;
 use VendingMachine\Domain\VendingMachine\Service\ChangeCalculator;
 use VendingMachine\Domain\VendingMachine\ValueObject\Change;
 use VendingMachine\Domain\VendingMachine\ValueObject\Coin;
@@ -39,11 +38,7 @@ final class VendingMachine
 
     public function selectProduct(ProductSelector $selector): Purchase
     {
-        $product = $this->productInventory->find($selector);
-
-        if (!$this->productInventory->hasAvailable($selector)) {
-            throw new ProductNotAvailableException($product);
-        }
+        $product = $this->productInventory->findAvailable($selector);
 
         $inserted = $this->insertedCoins->total();
 
