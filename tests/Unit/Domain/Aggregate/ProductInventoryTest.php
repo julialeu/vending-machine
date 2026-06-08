@@ -29,7 +29,7 @@ final class ProductInventoryTest extends TestCase
         $this->assertSame('Water', $found->name());
     }
 
-    public function test_find_throws_when_not_stocked(): void
+    public function test_find_throws_when_product_not_found(): void
     {
         $this->expectException(ProductNotFoundException::class);
         (new ProductInventory())->find(ProductSelector::WATER);
@@ -78,6 +78,20 @@ final class ProductInventoryTest extends TestCase
         $inventory->stock($this->water(), 0);
         $inventory->updateQuantity(ProductSelector::WATER, 5);
         $this->assertTrue($inventory->hasAvailable(ProductSelector::WATER));
+    }
+
+    public function test_update_quantity_throws_when_product_not_found(): void
+    {
+        $this->expectException(ProductNotFoundException::class);
+        (new ProductInventory())->updateQuantity(ProductSelector::WATER, 5);
+    }
+
+    public function test_update_quantity_throws_for_negative_quantity(): void
+    {
+        $this->expectException(InvalidStockQuantityException::class);
+        $inventory = new ProductInventory();
+        $inventory->stock($this->water(), 1);
+        $inventory->updateQuantity(ProductSelector::WATER, -1);
     }
 
     public function test_find_available_returns_product_when_in_stock(): void

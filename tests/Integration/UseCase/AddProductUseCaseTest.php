@@ -57,15 +57,21 @@ final class AddProductUseCaseTest extends TestCase
             quantity: 10,
         ));
 
-        // Buy 6 waters — only possible if stock was replaced to 10 (default was 5)
-        for ($i = 0; $i < 6; $i++) {
+        // Drain 5 units (default stock would be exhausted here)
+        for ($i = 0; $i < 5; $i++) {
             $this->insertCoin->execute(new InsertCoinRequest(25));
             $this->insertCoin->execute(new InsertCoinRequest(25));
             $this->insertCoin->execute(new InsertCoinRequest(25));
             $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
         }
 
-        $this->assertTrue(true);
+        // 6th purchase — only succeeds if stock was replaced to 10
+        $this->insertCoin->execute(new InsertCoinRequest(25));
+        $this->insertCoin->execute(new InsertCoinRequest(25));
+        $this->insertCoin->execute(new InsertCoinRequest(25));
+        $response = $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
+
+        $this->assertSame('Water', $response->productName);
     }
 
     public function test_throws_for_invalid_selector(): void

@@ -38,13 +38,15 @@ final class InsertedCoinsTest extends TestCase
         $this->assertTrue($inserted->isEmpty());
     }
 
-    public function test_coins_returns_without_emptying(): void
+    public function test_coins_returns_inserted_coins_without_emptying(): void
     {
         $inserted = new InsertedCoins();
         $inserted->insert(Coin::TEN_CENTS);
 
-        $inserted->coins();
+        $coins = $inserted->coins();
 
+        $this->assertCount(1, $coins);
+        $this->assertSame(Coin::TEN_CENTS, $coins[0]);
         $this->assertFalse($inserted->isEmpty());
     }
 }
