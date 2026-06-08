@@ -33,7 +33,6 @@ final class VendingMachineTest extends TestCase
         $this->serviceMachine = new ServiceMachineUseCase($repository);
     }
 
-    /** Scenario 1: Buy water with exact change */
     public function test_buy_water_with_exact_coins(): void
     {
         $this->insertCoin->execute(new InsertCoinRequest(25));
@@ -47,10 +46,8 @@ final class VendingMachineTest extends TestCase
         $this->assertEmpty($response->changeCoins);
     }
 
-    /** Scenario 2: Buy juice and receive change */
     public function test_buy_juice_and_receive_change(): void
     {
-        // Juice costs 1.00, insert 1.25
         $this->insertCoin->execute(new InsertCoinRequest(100));
         $this->insertCoin->execute(new InsertCoinRequest(25));
 
@@ -60,7 +57,6 @@ final class VendingMachineTest extends TestCase
         $this->assertSame(['0.25'], $response->changeCoins);
     }
 
-    /** Scenario 3: Cancel and get coins back */
     public function test_cancel_returns_all_inserted_coins(): void
     {
         $this->insertCoin->execute(new InsertCoinRequest(25));
@@ -73,7 +69,6 @@ final class VendingMachineTest extends TestCase
         $this->assertContains('0.10', $response->returnedCoins);
     }
 
-    /** Scenario 4: Insufficient funds */
     public function test_insufficient_funds_raises_exception(): void
     {
         $this->expectException(InsufficientFundsException::class);
@@ -81,7 +76,6 @@ final class VendingMachineTest extends TestCase
         $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
     }
 
-    /** Scenario 5: Product out of stock */
     public function test_product_not_available_raises_exception(): void
     {
         // Drain all 5 water units
@@ -99,7 +93,6 @@ final class VendingMachineTest extends TestCase
         $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
     }
 
-    /** Scenario 6: Machine cannot make change */
     public function test_insufficient_change_raises_exception(): void
     {
         $this->serviceMachine->execute(new ServiceMachineRequest(
@@ -113,7 +106,6 @@ final class VendingMachineTest extends TestCase
         $this->selectProduct->execute(new SelectProductRequest('GET-WATER'));
     }
 
-    /** Scenario 7: Service mode restocks the machine */
     public function test_service_mode_restocks_and_machine_works_again(): void
     {
         $this->serviceMachine->execute(new ServiceMachineRequest(
@@ -121,7 +113,6 @@ final class VendingMachineTest extends TestCase
             coinStocks: [25 => 20],
         ));
 
-        // Soda costs 1.50, insert 6x 0.25
         for ($i = 0; $i < 6; $i++) {
             $this->insertCoin->execute(new InsertCoinRequest(25));
         }
