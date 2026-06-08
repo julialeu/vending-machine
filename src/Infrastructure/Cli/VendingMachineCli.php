@@ -157,6 +157,11 @@ final class VendingMachineCli
 
     private function printUnknownCommand(string $input): void
     {
-        echo "Unknown: '{$input}'. Try a coin (0.25), product (GET-WATER), RETURN, SERVICE, or EXIT.\n";
+        if (str_contains($input, ',')) {
+            echo "'{$input}' not recognised. Did you mean '" . str_replace(',', '.', $input) . "'? Use a dot as decimal separator.\n";
+            return;
+        }
+
+        echo "'{$input}' not recognised. Try: 0.05  0.10  0.25  1.00  GET-WATER  GET-JUICE  GET-SODA  RETURN  SERVICE  EXIT\n";
     }
 }
