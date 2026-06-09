@@ -31,8 +31,5 @@ final class Product
         return $this->price;
     }
 
-    public function equals(self $other): bool
-    {
-        return $this->selector === $other->selector;
-    }
+
 }

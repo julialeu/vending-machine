@@ -26,7 +26,7 @@ final class ChangeCalculator
 
         foreach ($denominations as $coin) {
             $available = $inventory->countOf($coin);
-            $needed = min((int) ($remaining / $coin->value), $available);
+            $needed = min(intdiv($remaining, $coin->value), $available);
 
             for ($i = 0; $i < $needed; $i++) {
                 $coins[] = $coin;

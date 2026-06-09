@@ -47,7 +47,7 @@ final class ProductInventory
         return $product;
     }
 
-    public function dispense(ProductSelector $selector): Product
+    public function dispense(ProductSelector $selector): void
     {
         if (!isset($this->stock[$selector->value])) {
             throw new ProductNotFoundException($selector);
@@ -58,8 +58,6 @@ final class ProductInventory
         }
 
         $this->stock[$selector->value]['quantity']--;
-
-        return $this->stock[$selector->value]['product'];
     }
 
     public function hasAvailable(ProductSelector $selector): bool

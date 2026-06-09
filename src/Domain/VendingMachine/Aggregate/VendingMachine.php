@@ -15,7 +15,7 @@ use VendingMachine\Domain\VendingMachine\ValueObject\Purchase;
 
 final class VendingMachine
 {
-    private InsertedCoins $insertedCoins;
+    private readonly InsertedCoins $insertedCoins;
 
     public function __construct(
         private readonly ProductInventory $productInventory,
